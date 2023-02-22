@@ -1,6 +1,7 @@
 import math
 import time
-from perception import *
+import globalVariable
+
 
 def stabilize_steering_angle(
           curr_steering_angle, 
@@ -34,12 +35,12 @@ def control(img,averaged_lines):
     steeringRatio=0
     throttleRatio=0
 
-    if leftLineOnlyExit :
+    if globalVariable.leftLineOnlyExit :
         steeringRatio = -1
         throttleRatio=0.2
         numOFLine=1
 
-    elif rightLineOnlyExit:
+    elif globalVariable.rightLineOnlyExit:
         steeringRatio = 1 
         throttleRatio=0.2
         numOFLine=1

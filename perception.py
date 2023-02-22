@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import keyboard
+import globalVariable
 
 
 def make_coordinates(img,line_parameters):
@@ -28,7 +29,7 @@ def make_coordinates(img,line_parameters):
     return np.array([x1,y1,x2,y2])
 
 def average_slope_intercept(img, lines):
-    global oneLineExist ,rightLineOnlyExit,leftLineOnlyExit
+    #global oneLineExist ,rightLineOnlyExit,leftLineOnlyExit
     left_fit=[]
     right_fit=[] 
     if lines is not None:  
@@ -44,19 +45,19 @@ def average_slope_intercept(img, lines):
     #left_line=np.array([0,0,0,0])
     #right_line=np.array([0,0,0,0])
     if  left_fit and right_fit:
-        oneLineExist =False 
-        rightLineOnlyExit=False
-        leftLineOnlyExit=False
+        globalVariable.oneLineExist =False 
+        globalVariable.rightLineOnlyExit=False
+        globalVariable.leftLineOnlyExit=False
     elif left_fit :
-        oneLineExist=True
-        leftLineOnlyExit=True
+        globalVariable.oneLineExist=True
+        globalVariable.leftLineOnlyExit=True
     elif right_fit:
-        oneLineExist=True
-        rightLineOnlyExit=True
+        globalVariable.oneLineExist=True
+        globalVariable.rightLineOnlyExit=True
     else:
-        oneLineExist =False
-        leftLineOnlyExit=False
-        rightLineOnlyExit=False 
+        globalVariable.oneLineExist =False
+        globalVariable.leftLineOnlyExit=False
+        globalVariable.rightLineOnlyExit=False 
        
     left_fit_average= np.average(left_fit,axis=0)
     left_line=make_coordinates(img,left_fit_average)
