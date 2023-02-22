@@ -19,7 +19,8 @@ def make_coordinates(img,line_parameters):
         if slope==0:
             slope=0.000000000001
         y1=height
-        y2=int(height*(3.5/5))
+        #y2=int(height*(3.5/5))
+        y2=int(height*(1/2))
         try:
             x1=max(-2*width,min(2*width,int((y1-intercept)/slope)))
             x2=max(-2*width,min(2*width,int((y2-intercept)/slope)))
@@ -91,9 +92,25 @@ def display_lines(img,lines):
             cv2.line(line_image,(int(x1),int(y1)),(int(x2),int(y2)),(0,0,255),5)
     return line_image     
 
+def perspective_warp(image):
+
+    h, w = image.shape
+    source = np.float32([[10, 240],
+    [600, 240],
+    [10, 449],
+    [600, 449]])
+
+    destination = np.float32([[0, 0], [w, 0], [0, h], [w, h]])
+    # Given src and dst points, calculate the perspective transform matrix
+    M = cv2.getPerspectiveTransform(source, destination)
+    # Warp the image using OpenCV warpPerspective()
+    warped = cv2.warpPerspective(image, M, (image.shape[1], image.shape[0]))
+    return warped
+
 def perception(img):
     steering_lines=np.zeros_like(img)
     height, width, _ = img.shape
+
     #as the lane in the simulation is red so the following approch is used 
     #this approch get all the red coloured object in th image
     hsv_frame = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -102,13 +119,17 @@ def perception(img):
     red_mask = cv2.inRange(hsv_frame, lower_red, upper_red)
     masked = cv2.bitwise_and(hsv_frame, img, mask=red_mask)
     ###############################
-
+    
     #canny is used to make edge detection
-    Canny = canny(red_mask)
+    #Canny = canny(warp_image)
     ###############################
+    #cropped_image= region_of_interest(Canny)
+    
+    warp_image=perspective_warp(red_mask)
+    cv2.imshow("warp",warp_image)
+    cv2.imshow("original",red_mask)
 
-    cropped_image= region_of_interest(Canny)
-    lines= cv2.HoughLinesP(cropped_image,2,np.pi/180,100,np.array([]),minLineLength=40,maxLineGap=5)
+    lines= cv2.HoughLinesP(warp_image,1,np.pi/360,100,np.array([]),minLineLength=40,maxLineGap=5)
     averaged_lines= average_slope_intercept(img,lines)
     line_image=display_lines(img,averaged_lines)
     combo_image=cv2.addWeighted(img,0.8,line_image,1,1)
@@ -122,7 +143,7 @@ def perception(img):
     left_x2= averaged_lines[0][2]
     right_x2= averaged_lines[1][2]
     x = int((left_x2 + right_x2) / 2)
-    mid_lane_segment=cv2.line(steering_lines,(x,int(height*(3.5/5))-10),(x,int(height*(3.5/5))+10),(0,255,0),2)
+    mid_lane_segment=cv2.line(steering_lines,(x,int(height*(1/2))-10),(x,int(height*(1/2))+10),(0,255,0),2)
     combo_image=cv2.addWeighted(combo_image,0.8,mid_lane_segment,1,1)
     ###############################
     return combo_image,averaged_lines

@@ -1,2 +1,6 @@
-def globalVariable() :
-    global oneLineExist ,rightLineOnlyExit,leftLineOnlyExit
+global oneLineExist 
+global rightLineOnlyExit
+global leftLineOnlyExit
+oneLineExist=False
+rightLineOnlyExit=False
+leftLineOnlyExit=False

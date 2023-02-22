@@ -50,7 +50,7 @@ def control(img,averaged_lines):
         right_x2= averaged_lines[1][2]
         mid = int((width / 2))
         x_offset = (left_x2 + right_x2) / 2 - mid
-        y_offset = int(height*(3.5/5))
+        y_offset = int(height*(1/2))
         angle_to_mid_radian = math.atan( x_offset / y_offset)  # angle (in radian) to center vertical line
         angle_to_mid_deg = int(angle_to_mid_radian * 180.0 / math.pi)  # angle (in degrees) to center vertical line
         steering_angle = angle_to_mid_deg 

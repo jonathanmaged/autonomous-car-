@@ -60,6 +60,18 @@ def run_car(simulator: Simulator) -> None:
     cv2.imshow("Live", perception(img)[0])
     steeringRatio , throttleRatio =control(img,perception(img)[1])
     cv2.waitKey(1)
+    # steeringRatio = 0
+    # if keyboard.is_pressed("a"):
+    #     steeringRatio = 0.2
+    # elif keyboard.is_pressed("d"):
+    #     steeringRatio = -0.2
+
+    # throttleRatio = 1
+    # if keyboard.is_pressed("w"):
+    #     throttleRatio = 1
+    # elif keyboard.is_pressed("s"):
+    #     throttleRatio = -1
+       
 
     simulator.set_car_steering(steeringRatio * simulator.max_steer_angle / 1.7)
     simulator.set_car_velocity(throttleRatio * 25)
