@@ -37,8 +37,8 @@ class Simulator:
         self.max_steer_angle = 0.5236  # 30 degrees
         self.motor_torque = 60
 
-        self.steer_angle = 0
-        self.motor_velocity = 0
+        self.steer_angle = 0.1
+        self.motor_velocity = 10
 
         # Fetch id for the camera
         self.camera_handle = self.sim.getObject("/Manta/Camera")
